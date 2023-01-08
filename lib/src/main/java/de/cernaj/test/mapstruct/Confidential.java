@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface StringConversion {
+public @interface Confidential {
 
     String value();
 
