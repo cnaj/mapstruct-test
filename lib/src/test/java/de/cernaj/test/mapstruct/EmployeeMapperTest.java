@@ -3,38 +3,38 @@
  */
 package de.cernaj.test.mapstruct;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EmployeeMapperTest {
     @Test
     void noPrivileges() {
-        var source = new Employee("John Doe", "21 Jump Street", "50000");
-        var expected = new EmployeeDTO("John Doe", "<confidential>", "<confidential>");
+        Employee source = new Employee( "John Doe", "21 Jump Street", "50000" );
+        EmployeeDTO expected = new EmployeeDTO( "John Doe", "<confidential>", "<confidential>" );
 
-        var target = EmployeeMapperImplPoc.INSTANCE.toDto(source, null);
+        EmployeeDTO target = EmployeeMapperImplPoc.INSTANCE.toDto( source, null );
 
-        assertEquals(expected, target);
+        assertEquals( expected, target );
     }
 
     @Test
     void companyPrivileges() {
-        var source = new Employee("John Doe", "21 Jump Street", "50000");
-        var expected = new EmployeeDTO("John Doe", "21 Jump Street", "<confidential>");
+        Employee source = new Employee( "John Doe", "21 Jump Street", "50000" );
+        EmployeeDTO expected = new EmployeeDTO( "John Doe", "21 Jump Street", "<confidential>" );
 
-        var target = EmployeeMapperImplPoc.INSTANCE.toDto(source, "company");
+        EmployeeDTO target = EmployeeMapperImplPoc.INSTANCE.toDto( source, "company" );
 
-        assertEquals(expected, target);
+        assertEquals( expected, target );
     }
 
     @Test
     void managementPrivileges() {
-        var source = new Employee("John Doe", "21 Jump Street", "50000");
-        var expected = new EmployeeDTO("John Doe", "21 Jump Street", "50000");
+        Employee source = new Employee( "John Doe", "21 Jump Street", "50000" );
+        EmployeeDTO expected = new EmployeeDTO( "John Doe", "21 Jump Street", "50000" );
 
-        var target = EmployeeMapperImplPoc.INSTANCE.toDto(source, "management");
+        EmployeeDTO target = EmployeeMapperImplPoc.INSTANCE.toDto( source, "management" );
 
-        assertEquals(expected, target);
+        assertEquals( expected, target );
     }
 }

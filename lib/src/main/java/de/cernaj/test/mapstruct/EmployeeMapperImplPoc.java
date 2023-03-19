@@ -5,9 +5,28 @@ import java.lang.reflect.Method;
 public class EmployeeMapperImplPoc implements EmployeeMapper {
     public static final EmployeeMapperImplPoc INSTANCE = new EmployeeMapperImplPoc();
 
+    private static final Confidential getAddressMethodConfidentialAnnotation;
+    private static final Confidential getSalaryMethodConfidentialAnnotation;
+
+    static {
+        Method getAddressMethod;
+        Method getSalaryMethod;
+
+        try {
+            getAddressMethod = Employee.class.getMethod( "getAddress" );
+            getSalaryMethod = Employee.class.getMethod( "getSalary" );
+
+            getAddressMethodConfidentialAnnotation = getAddressMethod.getAnnotation( Confidential.class );
+            getSalaryMethodConfidentialAnnotation = getSalaryMethod.getAnnotation( Confidential.class );
+        }
+        catch ( NoSuchMethodException e ) {
+            throw new RuntimeException( e );
+        }
+    }
+
     @Override
     public EmployeeDTO toDto(Employee value, String accessLevel) {
-        if (value == null) {
+        if ( value == null ) {
             return null;
         }
 
@@ -15,21 +34,11 @@ public class EmployeeMapperImplPoc implements EmployeeMapper {
         String address = null;
         String salary = null;
 
-        Method getAddressMethod;
-        Method getSalaryMethod;
+        name = mapProperty( value.getName() );
+        address = mapProperty( value.getAddress(), accessLevel, getAddressMethodConfidentialAnnotation );
+        salary = mapProperty( value.getSalary(), accessLevel, getSalaryMethodConfidentialAnnotation );
 
-        try {
-            getAddressMethod = Employee.class.getMethod("getAddress");
-            getSalaryMethod = Employee.class.getMethod("getSalary");
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-
-        name = mapProperty(value.getName());
-        address = mapProperty(value.getAddress(), accessLevel, getAddressMethod.getAnnotation(Confidential.class));
-        salary = mapProperty(value.getSalary(), accessLevel, getSalaryMethod.getAnnotation(Confidential.class));
-
-        EmployeeDTO employeeDTO = new EmployeeDTO(name, address, salary);
+        EmployeeDTO employeeDTO = new EmployeeDTO( name, address, salary );
 
         return employeeDTO;
     }
