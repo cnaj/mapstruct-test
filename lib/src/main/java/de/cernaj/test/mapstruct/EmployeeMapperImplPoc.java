@@ -3,11 +3,11 @@ package de.cernaj.test.mapstruct;
 public class EmployeeMapperImplPoc implements EmployeeMapper {
     public static final EmployeeMapperImplPoc INSTANCE = new EmployeeMapperImplPoc();
 
-    private static final Confidential[] sourceAnnotationsConfidential;
+    private static final Confidential[] SOURCE_ANNOTATIONS_CONFIDENTIAL;
 
     static {
         try {
-            sourceAnnotationsConfidential = new Confidential[] {
+            SOURCE_ANNOTATIONS_CONFIDENTIAL = new Confidential[] {
                 Employee.class.getMethod( "getAddress" ).getAnnotation( Confidential.class ),
                 Employee.class.getMethod( "getSalary" ).getAnnotation( Confidential.class ),
             };
@@ -28,8 +28,8 @@ public class EmployeeMapperImplPoc implements EmployeeMapper {
         String salary = null;
 
         name = mapProperty( value.getName(), accessLevel, null );
-        address = mapProperty( value.getAddress(), accessLevel, sourceAnnotationsConfidential[0] );
-        salary = mapProperty( value.getSalary(), accessLevel, sourceAnnotationsConfidential[1] );
+        address = mapProperty( value.getAddress(), accessLevel, SOURCE_ANNOTATIONS_CONFIDENTIAL[0] );
+        salary = mapProperty( value.getSalary(), accessLevel, SOURCE_ANNOTATIONS_CONFIDENTIAL[1] );
 
         EmployeeDTO employeeDTO = new EmployeeDTO( name, address, salary );
 
