@@ -1,23 +1,16 @@
 package de.cernaj.test.mapstruct;
 
-import java.lang.reflect.Method;
-
 public class EmployeeMapperImplPoc implements EmployeeMapper {
     public static final EmployeeMapperImplPoc INSTANCE = new EmployeeMapperImplPoc();
 
-    private static final Confidential getAddressMethodConfidentialAnnotation;
-    private static final Confidential getSalaryMethodConfidentialAnnotation;
+    private static final Confidential[] sourceAnnotationsConfidential;
 
     static {
-        Method getAddressMethod;
-        Method getSalaryMethod;
-
         try {
-            getAddressMethod = Employee.class.getMethod( "getAddress" );
-            getSalaryMethod = Employee.class.getMethod( "getSalary" );
-
-            getAddressMethodConfidentialAnnotation = getAddressMethod.getAnnotation( Confidential.class );
-            getSalaryMethodConfidentialAnnotation = getSalaryMethod.getAnnotation( Confidential.class );
+            sourceAnnotationsConfidential = new Confidential[] {
+                Employee.class.getMethod( "getAddress" ).getAnnotation( Confidential.class ),
+                Employee.class.getMethod( "getSalary" ).getAnnotation( Confidential.class ),
+            };
         }
         catch ( NoSuchMethodException e ) {
             throw new RuntimeException( e );
@@ -34,9 +27,9 @@ public class EmployeeMapperImplPoc implements EmployeeMapper {
         String address = null;
         String salary = null;
 
-        name = mapProperty( value.getName() );
-        address = mapProperty( value.getAddress(), accessLevel, getAddressMethodConfidentialAnnotation );
-        salary = mapProperty( value.getSalary(), accessLevel, getSalaryMethodConfidentialAnnotation );
+        name = mapProperty( value.getName(), accessLevel, null );
+        address = mapProperty( value.getAddress(), accessLevel, sourceAnnotationsConfidential[0] );
+        salary = mapProperty( value.getSalary(), accessLevel, sourceAnnotationsConfidential[1] );
 
         EmployeeDTO employeeDTO = new EmployeeDTO( name, address, salary );
 
