@@ -11,10 +11,6 @@ public interface EmployeeMapper {
 
     EmployeeDTO toDto(Employee value, @Context String accessLevel);
 
-    default String mapProperty(String value) {
-        return value;
-    }
-
     default String mapProperty(String value, @Context String accessLevel, @SourceAnnotation Confidential confidential) {
         if (confidential == null) {
             return value;

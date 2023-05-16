@@ -4,16 +4,20 @@
 package de.cernaj.test.mapstruct;
 
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EmployeeMapperTest {
+
+    private final EmployeeMapper mapper = Mappers.getMapper( EmployeeMapper.class );
+
     @Test
     void noPrivileges() {
         Employee source = new Employee( "John Doe", "21 Jump Street", "50000" );
         EmployeeDTO expected = new EmployeeDTO( "John Doe", "<confidential>", "<confidential>" );
 
-        EmployeeDTO target = EmployeeMapperImplPoc.INSTANCE.toDto( source, null );
+        EmployeeDTO target = mapper.toDto( source, null );
 
         assertEquals( expected, target );
     }
@@ -23,7 +27,7 @@ class EmployeeMapperTest {
         Employee source = new Employee( "John Doe", "21 Jump Street", "50000" );
         EmployeeDTO expected = new EmployeeDTO( "John Doe", "21 Jump Street", "<confidential>" );
 
-        EmployeeDTO target = EmployeeMapperImplPoc.INSTANCE.toDto( source, "company" );
+        EmployeeDTO target = mapper.toDto( source, "company" );
 
         assertEquals( expected, target );
     }
@@ -33,7 +37,7 @@ class EmployeeMapperTest {
         Employee source = new Employee( "John Doe", "21 Jump Street", "50000" );
         EmployeeDTO expected = new EmployeeDTO( "John Doe", "21 Jump Street", "50000" );
 
-        EmployeeDTO target = EmployeeMapperImplPoc.INSTANCE.toDto( source, "management" );
+        EmployeeDTO target = mapper.toDto( source, "management" );
 
         assertEquals( expected, target );
     }

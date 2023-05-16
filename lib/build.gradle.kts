@@ -3,12 +3,13 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     val lombokVersion = "1.18.24"
-    val mapstructVersion = "1.5.3.Final"
+    val mapstructVersion = "1.6.0-SNAPSHOT"
 
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     implementation("org.mapstruct:mapstruct:${mapstructVersion}")
